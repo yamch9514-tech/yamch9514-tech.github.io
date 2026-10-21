@@ -44,8 +44,29 @@
     background:var(--card);color:var(--ink);cursor:pointer;min-height:40px
   }
   .filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  .rail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+  .hint{margin:0;color:var(--muted);font-size:.9rem}
+  .arrows{display:flex;gap:8px}
+  .arrows button{
+    width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);
+    font:700 1.2rem Inter,sans-serif;cursor:pointer;display:grid;place-items:center
+  }
+  .arrows button:disabled{opacity:.35;cursor:default}
+  .grid{
+    display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+    margin:0 -16px;padding:6px 16px 18px;scroll-padding:0 16px;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;cursor:grab;overscroll-behavior-x:contain
+  }
+  .grid::-webkit-scrollbar{display:none}
+  .grid.dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+  .grid.dragging a.card{pointer-events:none}
+  .grid > a.card{flex:0 0 82%;scroll-snap-align:start;max-width:340px}
+  @media (min-width:700px){ .grid > a.card{flex-basis:300px} }
+  .dots{display:flex;justify-content:center;gap:8px;margin-top:2px}
+  .dots button{width:9px;height:9px;padding:0;border-radius:999px;border:0;background:var(--line);cursor:pointer;transition:width .2s ease, background .2s ease}
+  .dots button[aria-current="true"]{width:24px;background:var(--track)}
   a.card{
+    -webkit-user-drag:none;user-select:none;
     display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--card);
     border:1.5px solid var(--line);border-radius:16px;padding:20px;border-top:6px solid var(--c);
     transition:transform .15s ease, box-shadow .15s ease
@@ -84,7 +105,15 @@
     <button type="button" data-f="y9" aria-pressed="false">Year 9 · J3T</button>
   </div>
 
-  <div class="grid" id="grid">
+  <div class="rail-head">
+    <p class="hint">Swipe left or right to see more games</p>
+    <div class="arrows">
+      <button type="button" id="prev" aria-label="Previous games">←</button>
+      <button type="button" id="next" aria-label="More games">→</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid" aria-label="Games">
     <a class="card" style="--c:var(--c1)" data-y="y7 y8 y9" href="https://yamch9514-tech.github.io/maths-track-and-field/">
       <div class="icon">🏃</div>
       <h2>Maths Track &amp; Field</h2>
@@ -128,6 +157,7 @@
       <span class="go">Open →</span>
     </a>
   </div>
+  <div class="dots" id="dots" aria-label="Choose a game"></div>
   <section class="parents" aria-labelledby="ph">
     <div>
       <h2 id="ph">Parents · J1T results</h2>
@@ -140,13 +170,76 @@
 <footer>Games save your progress on your own phone only.</footer>
 
 <script>
+  const grid=document.getElementById('grid');
+  const dotsEl=document.getElementById('dots');
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
   const btns=document.querySelectorAll('.filters button');
-  const cards=document.querySelectorAll('#grid .card');
+  const cards=Array.from(grid.querySelectorAll('.card'));
+  const shown=()=>cards.filter(c=>!c.classList.contains('hidden'));
+
+  function current(){
+    const list=shown(); let best=0, bestD=Infinity;
+    list.forEach((c,i)=>{const d=Math.abs(c.offsetLeft-grid.offsetLeft-grid.scrollLeft-16); if(d<bestD){bestD=d;best=i;}});
+    return best;
+  }
+  function goTo(i){
+    const list=shown(); if(!list.length) return;
+    i=Math.max(0,Math.min(list.length-1,i));
+    grid.scrollTo({left:list[i].offsetLeft-grid.offsetLeft-16,behavior:'smooth'});
+  }
+  function buildDots(){
+    dotsEl.innerHTML='';
+    shown().forEach((c,i)=>{
+      const d=document.createElement('button'); d.type='button';
+      d.setAttribute('aria-label','Go to '+c.querySelector('h2').textContent);
+      d.addEventListener('click',()=>goTo(i)); dotsEl.appendChild(d);
+    });
+    update();
+  }
+  function update(){
+    const i=current(); const max=grid.scrollWidth-grid.clientWidth-2;
+    Array.from(dotsEl.children).forEach((d,j)=>d.setAttribute('aria-current',j===i));
+    prev.disabled=grid.scrollLeft<=2; next.disabled=grid.scrollLeft>=max;
+  }
+  prev.addEventListener('click',()=>goTo(current()-1));
+  next.addEventListener('click',()=>goTo(current()+1));
+  let t; grid.addEventListener('scroll',()=>{clearTimeout(t); t=setTimeout(update,60);},{passive:true});
+  window.addEventListener('resize',update);
+
+  /* drag with a mouse on computers (phones already swipe natively) */
+  let down=false, startX=0, startLeft=0, moved=false;
+  grid.addEventListener('pointerdown',e=>{
+    if(e.pointerType!=='mouse') return;
+    down=true; moved=false; startX=e.clientX; startLeft=grid.scrollLeft;
+  });
+  window.addEventListener('pointermove',e=>{
+    if(!down) return;
+    const dx=e.clientX-startX;
+    if(!moved && Math.abs(dx)>5){ moved=true; grid.classList.add('dragging'); }
+    if(moved) grid.scrollLeft=startLeft-dx;
+  });
+  window.addEventListener('pointerup',()=>{
+    if(!down) return; down=false;
+    if(moved){ grid.classList.remove('dragging'); const i=current(); goTo(i); }
+  });
+  grid.addEventListener('click',e=>{ if(moved){ e.preventDefault(); moved=false; } },true);
+  grid.addEventListener('dragstart',e=>e.preventDefault());
+
+  /* keyboard arrows */
+  grid.tabIndex=0;
+  grid.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'){e.preventDefault();goTo(current()+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();goTo(current()-1);}
+  });
+
   btns.forEach(b=>b.addEventListener('click',()=>{
     btns.forEach(x=>x.setAttribute('aria-pressed',x===b));
     const f=b.dataset.f;
     cards.forEach(c=>c.classList.toggle('hidden',f!=='all'&&!c.dataset.y.split(' ').includes(f)));
+    grid.scrollLeft=0; buildDots();
   }));
+  buildDots();
 </script>
 </body>
 </html>
