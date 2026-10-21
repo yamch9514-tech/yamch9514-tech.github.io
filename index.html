@@ -183,9 +183,11 @@
     list.forEach((c,i)=>{const d=Math.abs(c.offsetLeft-grid.offsetLeft-grid.scrollLeft-16); if(d<bestD){bestD=d;best=i;}});
     return best;
   }
+  let target=null;
+  const here=()=>target===null?current():target;
   function goTo(i){
     const list=shown(); if(!list.length) return;
-    i=Math.max(0,Math.min(list.length-1,i));
+    i=Math.max(0,Math.min(list.length-1,i)); target=i;
     grid.scrollTo({left:list[i].offsetLeft-grid.offsetLeft-16,behavior:'smooth'});
   }
   function buildDots(){
@@ -198,12 +200,13 @@
     update();
   }
   function update(){
+    target=null;
     const i=current(); const max=grid.scrollWidth-grid.clientWidth-2;
     Array.from(dotsEl.children).forEach((d,j)=>d.setAttribute('aria-current',j===i));
     prev.disabled=grid.scrollLeft<=2; next.disabled=grid.scrollLeft>=max;
   }
-  prev.addEventListener('click',()=>goTo(current()-1));
-  next.addEventListener('click',()=>goTo(current()+1));
+  prev.addEventListener('click',()=>goTo(here()-1));
+  next.addEventListener('click',()=>goTo(here()+1));
   let t; grid.addEventListener('scroll',()=>{clearTimeout(t); t=setTimeout(update,60);},{passive:true});
   window.addEventListener('resize',update);
 
@@ -229,8 +232,8 @@
   /* keyboard arrows */
   grid.tabIndex=0;
   grid.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'){e.preventDefault();goTo(current()+1);}
-    if(e.key==='ArrowLeft'){e.preventDefault();goTo(current()-1);}
+    if(e.key==='ArrowRight'){e.preventDefault();goTo(here()+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();goTo(here()-1);}
   });
 
   btns.forEach(b=>b.addEventListener('click',()=>{
