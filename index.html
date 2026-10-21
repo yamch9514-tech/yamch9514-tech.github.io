@@ -25,6 +25,7 @@
     --track:#b13d27; --lane:#f2f0ea;
   }
   *{box-sizing:border-box}
+  button,a{touch-action:manipulation}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
   header{
     background:var(--track);color:#fff;padding:40px 16px 56px;position:relative;overflow:hidden;
@@ -78,7 +79,7 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
   .tag{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
   .go{font-weight:700;color:var(--c)}
-  .hidden{display:none}
+  .hidden,a.card.hidden{display:none}
   .parents{margin-top:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
     background:var(--card);border:1.5px dashed var(--line);border-radius:16px;padding:20px}
   .parents h2{margin:0 0 4px;font-size:1.1rem}
