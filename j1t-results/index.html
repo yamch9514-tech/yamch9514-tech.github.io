@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>J1T 2026 Results</title>
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f3f2ee;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-3: #6b6a65;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11, 11, 11, .10);
+    --child: #2a78d6;
+    --class: #898781;
+    --dot: #b0afa7;
+    --band: rgba(42, 120, 214, .09);
+    --btn: #2a78d6;
+    --btn-ink: #ffffff;
+    --link: #1c5cab;
+    --chip: #e9e8e3;
+    --chip-ink: #2b2a28;
+    --chip-on: #0b0b0b;
+    --chip-on-ink: #fcfcfb;
+    --error-bg: #fdecec;
+    --error-ink: #9b1c1c;
+    --focus: #2a78d6;
+    --y1: #9fc4ee;
+    --y2: #5b9be3;
+    --y3: #1f5fae;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #f0efec;
+      --ink-2: #c3c2b7;
+      --ink-3: #a3a29b;
+      --grid: #2c2c2a;
+      --axis: #383835;
+      --border: rgba(255, 255, 255, .10);
+      --child: #3987e5;
+      --class: #8a8983;
+      --dot: #5f5e59;
+      --band: rgba(57, 135, 229, .11);
+      --btn: #256abf;
+      --btn-ink: #ffffff;
+      --link: #86b6ef;
+      --chip: #262624;
+      --chip-ink: #e4e3de;
+      --chip-on: #f0efec;
+      --chip-on-ink: #1a1a19;
+      --error-bg: #3a1717;
+      --error-ink: #f4b4b4;
+      --focus: #86b6ef;
+      --y1: #2f5683;
+      --y2: #3f80cf;
+      --y3: #8fbdf3;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 40px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* Header */
+  .top { margin: 4px 0 18px; }
+  .school { margin: 0; color: var(--ink-2); font-size: 14px; letter-spacing: .01em; }
+  .top h1 { margin: 2px 0 0; font-size: 26px; line-height: 1.2; font-weight: 650; }
+  .sub { margin: 4px 0 0; color: var(--ink-3); font-size: 14px; }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin: 0 0 14px;
+  }
+  .card h2, .card h3 { margin: 0 0 4px; font-size: 17px; line-height: 1.3; font-weight: 650; }
+  .card .lede { margin: 0 0 14px; color: var(--ink-2); font-size: 14px; }
+
+  /* Code form */
+  form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  input[type=text] {
+    flex: 1 1 180px; min-width: 0;
+    font: 600 22px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    letter-spacing: .14em; text-transform: uppercase;
+    padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--axis); background: var(--page); color: var(--ink);
+  }
+  input[type=text]::placeholder { color: var(--ink-3); letter-spacing: 0; font: 400 16px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; text-transform: none; }
+  .primary {
+    flex: 0 0 auto; border: 0; border-radius: 10px; padding: 12px 18px;
+    background: var(--btn); color: var(--btn-ink); font-weight: 650; cursor: pointer; min-height: 48px;
+  }
+  .primary[disabled] { opacity: .65; cursor: progress; }
+  .msg { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--error-bg); color: var(--error-ink); font-size: 14px; }
+
+  /* Who + filters */
+  .who { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+  .who .label { margin: 0; color: var(--ink-3); font-size: 13px; }
+  .who h2 { margin: 0; font-size: 21px; line-height: 1.25; font-weight: 650; overflow-wrap: anywhere; }
+  .link-btn { background: none; border: 0; padding: 8px 0; color: var(--link); cursor: pointer; font-size: 14px; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; }
+
+  .filter { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+  .filter-label { color: var(--ink-3); font-size: 13px; flex: 0 0 auto; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    border: 0; border-radius: 999px; padding: 7px 13px; min-height: 36px;
+    background: var(--chip); color: var(--chip-ink); font-size: 14px; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-ink); font-weight: 600; }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 1px solid var(--grid); margin: 0 0 14px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .table-wrap { overflow-x: auto; }
+  .tabs [role=tab] {
+    flex: 1 0 auto; white-space: nowrap; background: none; border: 0; border-bottom: 2px solid transparent;
+    padding: 12px 10px 10px; margin-bottom: -1px; cursor: pointer;
+    color: var(--ink-2); font-size: 15px; font-weight: 550;
+  }
+  .tabs [role=tab][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 650; }
+
+  /* Stat tiles */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 14px; }
+  .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+  .tile.hero { grid-column: 1 / -1; }
+  .tile .t-label { margin: 0; color: var(--ink-2); font-size: 14px; }
+  .tile .t-value { margin: 2px 0 0; font-size: 30px; line-height: 1.15; font-weight: 650; }
+  .tile.hero .t-value { font-size: 52px; line-height: 1.05; }
+  .tile .t-note { margin: 4px 0 0; color: var(--ink-3); font-size: 13px; }
+  @media (min-width: 560px) {
+    .tiles { grid-template-columns: 1.3fr 1fr 1fr; }
+    .tile.hero { grid-column: auto; }
+  }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 0 14px; color: var(--ink-2); font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .key-rect { width: 14px; height: 10px; border-radius: 0 3px 3px 0; display: inline-block; }
+  .key-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .key-dot.me { width: 12px; height: 12px; }
+  .key-line { width: 16px; height: 2px; border-radius: 1px; display: inline-block; }
+  .key-tick { width: 2px; height: 14px; display: inline-block; }
+
+  /* Bars */
+  .bar-row { padding: 10px 0 12px; border-top: 1px solid var(--grid); }
+  .bar-row:first-of-type { border-top: 0; padding-top: 2px; }
+  .bar-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 0 0 6px; }
+  .subj { font-weight: 600; font-size: 15px; overflow-wrap: anywhere; }
+  .range { color: var(--ink-3); font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .bar-line { display: flex; align-items: center; gap: 10px; height: 18px; }
+  .track { position: relative; flex: 1 1 auto; height: 10px; background: linear-gradient(var(--grid), var(--grid)) left center / 100% 1px no-repeat; }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; min-width: 2px; }
+  .bar.child { background: var(--child); }
+  .bar.class { background: var(--class); }
+  .track-note { position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: var(--surface); padding-right: 6px; color: var(--ink-3); font-size: 13px; font-style: italic; line-height: 1; }
+  .val { flex: 0 0 44px; text-align: right; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .val.strong { color: var(--ink); font-weight: 700; font-size: 15px; }
+
+  /* Dot strips */
+  .strip { padding: 10px 0 6px; border-top: 1px solid var(--grid); }
+  .strip:first-of-type { border-top: 0; padding-top: 2px; }
+  .strip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .strip-head .mine { font-size: 14px; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .strip-head .mine b { color: var(--ink); font-size: 15px; }
+  .strip svg { display: block; width: 100%; overflow: visible; }
+  .strip.overall .subj { font-size: 15px; }
+
+  /* Progress */
+  .control { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
+  .control label { color: var(--ink-3); font-size: 13px; }
+  select {
+    font: inherit; font-size: 15px; padding: 9px 36px 9px 12px; border-radius: 10px; min-height: 42px;
+    border: 1px solid var(--axis); background: var(--surface); color: var(--ink); max-width: 100%;
+  }
+  .chart { position: relative; outline: none; }
+  .chart:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 6px; }
+  .chart svg { display: block; width: 100%; touch-action: pan-y; }
+  .readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; min-height: 44px; margin: 0 0 6px; padding: 8px 0 6px; border-bottom: 1px solid var(--grid); }
+  .readout .ro-title { flex: 1 0 100%; color: var(--ink-3); font-size: 13px; }
+  .readout .ro-item { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-2); font-size: 13px; }
+  .readout .ro-item b { color: var(--ink); font-size: 17px; font-variant-numeric: tabular-nums; }
+  .note-inline { margin: 4px 0 0; color: var(--ink-3); font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+  th, td { text-align: right; padding: 8px 4px; border-top: 1px solid var(--grid); font-variant-numeric: tabular-nums; white-space: nowrap; vertical-align: top; }
+  th { color: var(--ink-3); font-weight: 500; font-size: 12.5px; border-top: 0; white-space: normal; vertical-align: bottom; }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  th:last-child, td:last-child { padding-right: 0; }
+  td:first-child { white-space: normal; min-width: 6.5em; }
+  td .of { display: block; color: var(--ink-3); font-size: 12px; }
+  tr.is-selected td { background: var(--band); }
+  td.mine { font-weight: 700; }
+
+  /* Comments */
+  .comment { padding: 12px 0; border-top: 1px solid var(--grid); }
+  .comment:first-of-type { border-top: 0; padding-top: 4px; }
+  .comment .c-subj { margin: 0 0 3px; font-size: 13px; color: var(--ink-3); font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+  .comment .c-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  /* Class years */
+  .years { display: flex; gap: 6px; margin: 0 0 14px; padding: 4px; border-radius: 12px; background: var(--chip); overflow-x: auto; scrollbar-width: none; }
+  .years::-webkit-scrollbar { display: none; }
+  .years button {
+    flex: 1 0 auto; border: 0; border-radius: 9px; padding: 9px 12px; min-height: 42px;
+    background: transparent; color: var(--chip-ink); font-size: 15px; font-weight: 550; cursor: pointer; white-space: nowrap;
+  }
+  .years button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 650; box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
+
+  /* Compare */
+  .modes { display: flex; gap: 6px; margin: 0 0 14px; flex-wrap: wrap; }
+  .pickers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 14px; }
+  .pickers label { display: block; color: var(--ink-3); font-size: 13px; margin: 0 0 4px; }
+  .pickers select { width: 100%; }
+  @media (max-width: 520px) { .pickers { grid-template-columns: 1fr; } }
+  .db-row { padding: 10px 0 8px; border-top: 1px solid var(--grid); }
+  .db-row:first-of-type { border-top: 0; padding-top: 2px; }
+  .db-row.overall .subj { font-size: 16px; }
+  .db-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .change { font-size: 14px; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .change b { color: var(--ink); }
+  .db-row svg { display: block; width: 100%; overflow: visible; }
+  .db-note { margin: 2px 0 0; color: var(--ink-3); font-size: 12.5px; }
+  .key-ring { width: 11px; height: 11px; border-radius: 50%; display: inline-block; box-sizing: border-box; border: 2px solid var(--child); background: var(--surface) !important; }
+
+  .empty { color: var(--ink-2); margin: 0; }
+  .foot { margin-top: 22px; color: var(--ink-3); font-size: 13px; }
+  .foot p { margin: 0 0 8px; }
+  .foot .teacher-note { color: var(--ink-2); font-size: 14px; white-space: pre-wrap; }
+  .busy { opacity: .55; transition: opacity .2s; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="school" id="school" hidden></p>
+    <h1 id="title">Results</h1>
+    <p class="sub" id="sub" hidden></p>
+  </header>
+
+  <section class="card" id="login" aria-labelledby="loginTitle">
+    <h2 id="loginTitle">Enter your child's code</h2>
+    <p class="lede">The form teacher gave you a 6-character code. It opens your own child's results only.</p>
+    <form id="codeForm" autocomplete="off" novalidate>
+      <label for="code" class="sr">Your child's code</label>
+      <input id="code" type="text" inputmode="text" autocapitalize="characters" autocomplete="off"
+             autocorrect="off" spellcheck="false" maxlength="12" placeholder="6-character code">
+      <button class="primary" id="go" type="submit">View results</button>
+    </form>
+    <p class="msg" id="loginMsg" role="alert" hidden></p>
+  </section>
+
+  <section id="results" hidden>
+    <div class="who">
+      <div>
+        <p class="label">Results for</p>
+        <h2 id="childName" tabindex="-1"></h2>
+      </div>
+      <button class="link-btn" id="another" type="button">Use another code</button>
+    </div>
+
+    <div id="hasExams">
+      <div class="years" id="yearBar" role="group" aria-label="Class year" hidden></div>
+      <div class="card" id="yearEmpty" hidden>
+        <p class="empty" id="yearEmptyText"></p>
+      </div>
+      <div id="yearContent">
+        <div class="filter" id="examFilter">
+          <span class="filter-label" id="examLabel">Exam</span>
+          <div class="chips" id="examChips" role="group" aria-labelledby="examLabel"></div>
+        </div>
+        <div class="tabs" role="tablist" aria-label="What to show">
+          <button role="tab" id="tab-marks" aria-controls="panel-marks" aria-selected="true">Overall marks</button>
+        <button role="tab" id="tab-exam" aria-controls="panel-exam" aria-selected="false" tabindex="-1">Exam marks</button>
+          <button role="tab" id="tab-progress" aria-controls="panel-progress" aria-selected="false" tabindex="-1">Progress</button>
+          <button role="tab" id="tab-comments" aria-controls="panel-comments" aria-selected="false" tabindex="-1">Comments</button>
+          <button role="tab" id="tab-compare" aria-controls="panel-compare" aria-selected="false" tabindex="-1">Compare</button>
+        </div>
+        <div role="tabpanel" id="panel-marks" aria-labelledby="tab-marks"></div>
+      <div role="tabpanel" id="panel-exam" aria-labelledby="tab-exam" hidden></div>
+        <div role="tabpanel" id="panel-progress" aria-labelledby="tab-progress" hidden></div>
+        <div role="tabpanel" id="panel-comments" aria-labelledby="tab-comments" hidden></div>
+        <div role="tabpanel" id="panel-compare" aria-labelledby="tab-compare" hidden></div>
+      </div>
+    </div>
+
+    <div class="card" id="noExams" hidden>
+      <p class="empty">No results have been released yet. Please check again later.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p class="teacher-note" id="note" hidden></p>
+    <p>Marks are out of 100. Class figures include every student who sat the paper, but never show anyone's name.
+       "Position" compares your child's average mark (over the subjects they sat) with the rest of the class.</p>
+  </footer>
+</div>
+
+<script>
+  // This copy of the page lives on GitHub Pages. Results come from the Google Sheet through
+  // the script's data link, which checks the code and sends back only that one child.
+  var API = 'https://script.google.com/macros/s/AKfycbx46Q2JlVdM-IqkV5CdocVBTt1_R0HJrbtV69G__4mGE69dLsCOY5seHpM4wMulpSA_/exec';
+  var INFO = {"school":"Hua Lian High School","className":"J1T 2026","year":"","note":"If you have any questions, please contact the form teacher."};
+  try { var savedInfo = JSON.parse(localStorage.getItem('j1t-info') || 'null'); if (savedInfo && savedInfo.className) INFO = savedInfo; } catch (e) {}
+
+  // Asks the Sheet. Google sometimes has a slow moment, so wait up to 25 seconds
+  // and try again (3 tries in all) before giving up.
+  function askSheet(body, onDone, onFail) {
+    var tries = 0;
+    function attempt() {
+      tries++;
+      var ctrl = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 25000);
+      fetch(API, { method: 'POST', body: JSON.stringify(body), redirect: 'follow', signal: ctrl ? ctrl.signal : undefined })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (res) {
+          clearTimeout(timer);
+          if (res && res.reason === 'error' && tries < 3) return setTimeout(attempt, 1500 * tries);
+          onDone(res);
+        })
+        .catch(function () {
+          clearTimeout(timer);
+          if (tries < 3) setTimeout(attempt, 1500 * tries); else onFail();
+        });
+    }
+    attempt();
+  }
+
+  (function () {
+    'use strict';
+
+    var MESSAGES = {
+      length: 'Codes have 6 letters and numbers. Please check and try again.',
+      wrong: 'That code didn’t work. Please check it and try again. Codes use capital letters and the numbers 2–9 only (there is no O, I, L, 0 or 1).',
+      busy: 'Too many wrong codes were tried in the last few minutes. Please wait about 10 minutes and try again.',
+      error: 'Sorry, something went wrong. Please try again in a moment.'
+    };
+    var OVERALL = 'Average (all subjects)';
+    var SVGNS = 'http://www.w3.org/2000/svg';
+    var state = { data: null, year: 0, exam: 0, tab: 'marks', subject: OVERALL, cmpMode: 'exam', cmpFrom: null, cmpTo: null };
+
+    /* ---------- tiny DOM helpers (all text goes in as text, never as HTML) ---------- */
+    function $(id) { return document.getElementById(id); }
+    function h(tag, attrs, kids) {
+      var el = document.createElement(tag);
+      if (attrs) Object.keys(attrs).forEach(function (k) {
+        if (k === 'text') el.textContent = attrs[k];
+        else if (k === 'cls') el.className = attrs[k];
+        else el.setAttribute(k, attrs[k]);
+      });
+      (kids || []).forEach(function (c) { if (c != null) el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+      return el;
+    }
+    function s(tag, attrs) {
+      var el = document.createElementNS(SVGNS, tag);
+      Object.keys(attrs || {}).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+      return el;
+    }
+    function fmt(v) {
+      if (v === null || v === undefined || isNaN(v)) return '—';
+      return (Math.round(v * 10) / 10).toString();
+    }
+    function ordinal(n) {
+      var t = n % 100, u = n % 10;
+      if (t >= 11 && t <= 13) return n + 'th';
+      return n + (u === 1 ? 'st' : u === 2 ? 'nd' : u === 3 ? 'rd' : 'th');
+    }
+    function pct(v) { return Math.max(0, Math.min(100, v)); }
+    var measureCtx = document.createElement('canvas').getContext('2d');
+    function textWidth(t, size) {
+      measureCtx.font = size + 'px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+      return measureCtx.measureText(t).width;
+    }
+    function fitText(t, size, max) {
+      if (textWidth(t, size) <= max) return t;
+      var out = t;
+      while (out.length > 1 && textWidth(out + '…', size) > max) out = out.slice(0, -1);
+      return out.replace(/\s+$/, '') + '…';
+    }
+
+    /* ---------- header ---------- */
+    function setHeader() {
+      if (INFO.school) { $('school').textContent = INFO.school; $('school').hidden = false; }
+      $('title').textContent = INFO.className ? INFO.className + ' results' : 'Results';
+      if (INFO.year) { $('sub').textContent = 'School year ' + INFO.year; $('sub').hidden = false; }
+      if (INFO.note) { $('note').textContent = INFO.note; $('note').hidden = false; }
+    }
+
+    /* ---------- code entry ---------- */
+    function showLoginMessage(text) {
+      var m = $('loginMsg');
+      m.textContent = text;
+      m.hidden = !text;
+    }
+    function setBusy(on) {
+      $('go').disabled = on;
+      $('code').disabled = on;
+      $('go').textContent = on ? 'Checking…' : 'View results';
+    }
+    $('codeForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var code = $('code').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (code.length !== 6) { showLoginMessage(MESSAGES.length); $('code').focus(); return; }
+      showLoginMessage('');
+      setBusy(true);
+      askSheet({ action: 'results', code: code }, function (res) {
+          setBusy(false);
+          if (!res || !res.ok) {
+            showLoginMessage(MESSAGES[(res && res.reason) || 'error'] || MESSAGES.error);
+            $('code').focus();
+            return;
+          }
+          $('code').value = '';
+          openResults(res);
+        }, function () {
+          setBusy(false);
+          showLoginMessage(MESSAGES.error);
+        });
+    });
+    $('another').addEventListener('click', function () {
+      state.data = null;
+      $('results').hidden = true;
+      $('login').hidden = false;
+      $('code').value = '';
+      showLoginMessage('');
+      $('code').focus();
+    });
+
+    /* ---------- results ---------- */
+    function openResults(res) {
+      state.data = res;
+      var years = res.years || [];
+      // Start on the latest class year that has results, at its latest exam.
+      state.year = Math.max(0, years.length - 1);
+      for (var y = years.length - 1; y >= 0; y--) { if (years[y].exams.length) { state.year = y; break; } }
+      state.exam = Math.max(0, yearExams().length - 1);
+      state.tab = 'marks';
+      state.subject = OVERALL;
+      state.cmpMode = 'exam';
+      state.cmpFrom = state.cmpTo = null;
+      $('login').hidden = true;
+      $('results').hidden = false;
+      $('childName').textContent = res.name;
+      var any = allExams().length > 0;
+      $('hasExams').hidden = !any;
+      $('noExams').hidden = any;
+      if (any) showYear();
+      $('childName').focus();
+    }
+
+    function yearExams() {
+      var y = state.data && state.data.years && state.data.years[state.year];
+      return y ? y.exams : [];
+    }
+    function currentExam() { return yearExams()[state.exam]; }
+    /* Every released exam across the class years parents can see, oldest first. */
+    function allExams() {
+      var out = [];
+      ((state.data && state.data.years) || []).forEach(function (y, yi) {
+        y.exams.forEach(function (ex, ei) { out.push({ key: yi + ':' + ei, year: y.label, yi: yi, exam: ex }); });
+      });
+      return out;
+    }
+    function manyYears() { return ((state.data && state.data.years) || []).length > 1; }
+
+    function renderYears() {
+      var bar = $('yearBar'), years = state.data.years || [];
+      bar.textContent = '';
+      bar.hidden = !(years.length && years[0].label);
+      years.forEach(function (y, i) {
+        var b = h('button', { type: 'button', 'aria-pressed': String(i === state.year), text: y.label });
+        b.addEventListener('click', function () {
+          if (state.year === i) return;
+          state.year = i;
+          state.exam = Math.max(0, yearExams().length - 1);
+          state.subject = OVERALL;
+          showYear();
+        });
+        bar.appendChild(b);
+      });
+    }
+
+    function showYear() {
+      renderYears();
+      var exams = yearExams(), label = state.data.years[state.year].label;
+      var empty = !exams.length;
+      $('yearEmpty').hidden = !empty;
+      $('yearContent').hidden = empty;
+      if (empty) {
+        $('yearEmptyText').textContent = 'No results have been released for ' + label + ' yet. Please check again later.';
+        return;
+      }
+      renderChips();
+      selectTab(state.tab, false);
+    }
+
+    function renderChips() {
+      var box = $('examChips');
+      box.textContent = '';
+      $('examFilter').hidden = state.tab === 'compare';
+      yearExams().forEach(function (ex, i) {
+        var b = h('button', { cls: 'chip', type: 'button', 'aria-pressed': String(i === state.exam), text: ex.name });
+        b.addEventListener('click', function () {
+          state.exam = i;
+          renderChips();
+          renderPanel();
+        });
+        box.appendChild(b);
+      });
+    }
+
+    var TABS = ['marks', 'exam', 'progress', 'comments', 'compare'];
+    function selectTab(name, focus) {
+      state.tab = name;
+      $('examFilter').hidden = name === 'compare'; // Compare picks its own exams across all years
+      var years = (state.data && state.data.years) || [];
+      $('yearBar').hidden = name === 'compare' || !(years.length && years[0].label);
+      TABS.forEach(function (t) {
+        var tab = $('tab-' + t), panel = $('panel-' + t), on = t === name;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        panel.hidden = !on;
+      });
+      if (focus) $('tab-' + name).focus();
+      renderPanel();
+    }
+    TABS.forEach(function (t, i) {
+      var tab = $('tab-' + t);
+      tab.addEventListener('click', function () { selectTab(t, false); });
+      tab.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          var next = TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length];
+          selectTab(next, true);
+        }
+      });
+    });
+
+    function renderPanel() {
+      if (!state.data || !yearExams().length) return;
+      if (state.tab === 'marks') renderMarks($('panel-marks'), currentExam());
+      else if (state.tab === 'exam') renderExamMarks($('panel-exam'), currentExam());
+      else if (state.tab === 'progress') renderProgress($('panel-progress'));
+      else if (state.tab === 'compare') renderCompare($('panel-compare'));
+      else renderComments($('panel-comments'), currentExam());
+    }
+
+    /* ---------- Exam marks tab: a plain table of one exam ---------- */
+    function renderExamMarks(panel, exam) {
+      panel.textContent = '';
+      var card = h('section', { cls: 'card', 'aria-labelledby': 'emTitle' }, [
+        h('h3', { id: 'emTitle', text: exam.name }),
+        h('p', { cls: 'lede', text: 'Exam paper marks only, each subject out of 100. Choose another exam above to see its marks.' })
+      ]);
+      var em = exam.examMarks;
+      if (!em || !em.subjects || !em.subjects.length) {
+        card.appendChild(h('p', { cls: 'empty', text: 'The exam marks for ' + exam.name + ' are not ready yet.' }));
+        panel.appendChild(card);
+        return;
+      }
+      var table = h('table', null, [
+        h('caption', { cls: 'sr', text: 'Exam marks for ' + exam.name }),
+        h('thead', null, [h('tr', null, ['Subject', 'Mark', 'Class avg', 'Highest', 'Position'].map(function (t) { return h('th', { scope: 'col', text: t }); }))])
+      ]);
+      var body = h('tbody');
+      function place(mark, spread) {
+        if (mark === null || mark === undefined || !spread || !spread.length) return h('td', { text: '\u2014' });
+        var above = spread.filter(function (v) { return v > mark + 1e-9; }).length;
+        var same = spread.filter(function (v) { return Math.abs(v - mark) <= 1e-9; }).length;
+        return h('td', null, [ordinal(above + 1), h('span', { cls: 'of', text: 'of ' + spread.length })]);
+      }
+      em.subjects.forEach(function (sub) {
+        body.appendChild(h('tr', null, [
+          h('td', { text: sub.name }),
+          h('td', { cls: 'mine', text: sub.absent ? 'Absent' : fmt(sub.mark) }),
+          h('td', { text: fmt(sub.avg) }),
+          h('td', { text: fmt(sub.high) }),
+          place(sub.absent ? null : sub.mark, sub.spread)
+        ]));
+      });
+      var o = em.overall;
+      if (o) {
+        body.appendChild(h('tr', { cls: 'is-selected' }, [
+          h('td', { text: 'Average (all subjects)' }),
+          h('td', { cls: 'mine', text: fmt(o.mark) }),
+          h('td', { text: fmt(o.avg) }),
+          h('td', { text: fmt(o.high) }),
+          h('td', null, [ordinal(o.position), h('span', { cls: 'of', text: 'of ' + o.count })])
+        ]));
+      }
+      table.appendChild(body);
+      card.appendChild(h('div', { cls: 'table-wrap' }, [table]));
+      panel.appendChild(card);
+    }
+
+    /* ---------- Marks tab ---------- */
+    function tile(label, value, note, hero) {
+      return h('div', { cls: 'tile' + (hero ? ' hero' : '') }, [
+        h('p', { cls: 't-label', text: label }),
+        h('p', { cls: 't-value', text: value }),
+        note ? h('p', { cls: 't-note', text: note }) : null
+      ]);
+    }
+
+    function legend(items) {
+      return h('div', { cls: 'legend', 'aria-hidden': 'true' }, items.map(function (it) {
+        var key = h('i', { cls: it.kind });
+        key.style.background = it.color;
+        return h('span', null, [key, it.label]);
+      }));
+    }
+
+    function renderMarks(panel, exam) {
+      panel.textContent = '';
+      if (!exam.subjects.length) {
+        panel.appendChild(h('div', { cls: 'card' }, [h('p', { cls: 'empty', text: 'No marks have been entered for ' + exam.name + ' yet.' })]));
+        return;
+      }
+      var o = exam.overall;
+      panel.appendChild(h('div', { cls: 'tiles' }, [
+        tile('Average mark', o ? fmt(o.mark) : '—',
+          o ? 'Across the ' + o.sat + ' subject' + (o.sat === 1 ? '' : 's') + ' your child sat' : 'No marks yet', true),
+        tile('Class average', o ? fmt(o.avg) : '—', o ? 'Highest ' + fmt(o.high) + ' · lowest ' + fmt(o.low) : ''),
+        tile('Class position', o ? ordinal(o.position) : '—', o ? 'out of ' + o.count + (o.tied ? ' (shared)' : '') : '')
+      ]));
+
+      // Compared with the class
+      var bars = h('section', { cls: 'card', 'aria-labelledby': 'cmpTitle' }, [
+        h('h3', { id: 'cmpTitle', text: 'Compared with the class average' }),
+        h('p', { cls: 'lede', text: exam.name + ' · each subject out of 100' }),
+        legend([
+          { kind: 'key-rect', color: 'var(--child)', label: 'Your child' },
+          { kind: 'key-rect', color: 'var(--class)', label: 'Class average' }
+        ])
+      ]);
+      exam.subjects.forEach(function (sub) {
+        var row = h('div', { cls: 'bar-row', role: 'group' }, [
+          h('div', { cls: 'bar-head' }, [
+            h('span', { cls: 'subj', text: sub.name }),
+            h('span', { cls: 'range', text: 'Highest ' + fmt(sub.high) + ' · lowest ' + fmt(sub.low) })
+          ]),
+          barLine(sub.mark, sub.absent, 'child'),
+          barLine(sub.avg, false, 'class')
+        ]);
+        row.setAttribute('aria-label', sub.name + ': your child ' + (sub.absent ? 'absent' : fmt(sub.mark)) +
+          ', class average ' + fmt(sub.avg) + ', highest ' + fmt(sub.high) + ', lowest ' + fmt(sub.low));
+        bars.appendChild(row);
+      });
+      panel.appendChild(bars);
+
+      // Among classmates
+      var spread = h('section', { cls: 'card', 'aria-labelledby': 'sprTitle' }, [
+        h('h3', { id: 'sprTitle', text: 'Among classmates' }),
+        h('p', { cls: 'lede', text: 'Each grey dot is one classmate’s mark. Names are never shown.' }),
+        legend([
+          { kind: 'key-dot me', color: 'var(--child)', label: 'Your child' },
+          { kind: 'key-dot', color: 'var(--dot)', label: 'Classmates' },
+          { kind: 'key-tick', color: 'var(--class)', label: 'Class average' }
+        ])
+      ]);
+      panel.appendChild(spread);
+      var width = Math.max(240, spread.clientWidth - 32);
+      if (o) spread.appendChild(stripRow(OVERALL, o.mark, false, o.spread, o.avg, width, true, true));
+      exam.subjects.forEach(function (sub, i) {
+        spread.appendChild(stripRow(sub.name, sub.mark, sub.absent, sub.spread, sub.avg, width, false,
+          i === exam.subjects.length - 1 || (!o && i === 0)));
+      });
+    }
+
+    function barLine(v, absent, who) {
+      var track = h('div', { cls: 'track' });
+      var hasValue = v !== null && v !== undefined;
+      if (hasValue) {
+        var bar = h('div', { cls: 'bar ' + who });
+        bar.style.width = pct(v) + '%';
+        track.appendChild(bar);
+      } else {
+        track.appendChild(h('span', { cls: 'track-note', text: absent ? 'Absent' : 'No mark' }));
+      }
+      return h('div', { cls: 'bar-line', 'aria-hidden': 'true' }, [
+        track,
+        h('span', { cls: 'val' + (who === 'child' ? ' strong' : ''), text: hasValue ? fmt(v) : '' })
+      ]);
+    }
+
+    function stripRow(label, mine, absent, values, avg, width, isOverall, showAxis) {
+      var row = h('div', { cls: 'strip' + (isOverall ? ' overall' : ''), role: 'img' });
+      var mineText = mine === null || mine === undefined ? (absent ? 'Absent' : 'No mark') : null;
+      row.appendChild(h('div', { cls: 'strip-head' }, [
+        h('span', { cls: 'subj', text: label }),
+        mineText ? h('span', { cls: 'mine', text: mineText })
+                 : h('span', { cls: 'mine' }, ['Your child ', h('b', { text: fmt(mine) })])
+      ]));
+      row.setAttribute('aria-label', label + ': your child ' + (mineText || fmt(mine)) +
+        ', class average ' + fmt(avg) + ', ' + values.length + ' students');
+      row.appendChild(dotStrip(values, mine, avg, width, showAxis));
+      return row;
+    }
+
+    /* Beeswarm strip: every classmate as a dot along 0–100, your child highlighted.
+       Dots may overlap slightly; the ring in the card colour keeps each one visible. */
+    function dotStrip(values, mine, avg, width, showAxis) {
+      var padX = 8, r = 3.5, rMe = 6.5, overlap = 1, step = 1.5;
+      var x = function (v) { return padX + pct(v) / 100 * (width - padX * 2); };
+      var others = values.slice();
+      var hasMine = mine !== null && mine !== undefined;
+      if (hasMine) {
+        var at = others.indexOf(mine);
+        if (at >= 0) others.splice(at, 1);
+      }
+      var placed = [];
+      if (hasMine) placed.push({ x: x(mine), y: 0, r: rMe, me: true });
+      others.map(function (v) { return { v: v, x: x(v) }; })
+        .sort(function (a, b) { return a.x - b.x; })
+        .forEach(function (p) {
+          for (var k = 0; k < 400; k++) {
+            var off = k === 0 ? 0 : Math.ceil(k / 2) * step * (k % 2 ? -1 : 1);
+            var clear = placed.every(function (q) {
+              var dx = q.x - p.x, dy = q.y - off, min = q.r + r - overlap;
+              return dx * dx + dy * dy >= min * min;
+            });
+            if (clear) { placed.push({ x: p.x, y: off, r: r }); return; }
+          }
+          placed.push({ x: p.x, y: 0, r: r });
+        });
+      var reach = placed.reduce(function (m, q) { return Math.max(m, Math.abs(q.y) + q.r + 1); }, rMe + 1);
+      var top = 4, mid = top + reach, axisY = mid + reach + 4, height = axisY + (showAxis ? 15 : 3);
+
+      var svg = s('svg', { viewBox: '0 0 ' + width + ' ' + height, width: width, height: height, 'aria-hidden': 'true', focusable: 'false' });
+      [0, 25, 50, 75, 100].forEach(function (t) {
+        svg.appendChild(s('line', { x1: x(t), x2: x(t), y1: top - 2, y2: axisY, stroke: 'var(--grid)', 'stroke-width': 1 }));
+      });
+      svg.appendChild(s('line', { x1: x(0), x2: x(100), y1: axisY, y2: axisY, stroke: 'var(--axis)', 'stroke-width': 1 }));
+      if (showAxis) {
+        [0, 25, 50, 75, 100].forEach(function (t) {
+          var lab = s('text', { x: x(t), y: axisY + 13, 'text-anchor': t === 0 ? 'start' : t === 100 ? 'end' : 'middle', 'font-size': 11, fill: 'var(--ink-3)' });
+          lab.textContent = String(t);
+          svg.appendChild(lab);
+        });
+      }
+      if (avg !== null && avg !== undefined) {
+        var tick = s('line', { x1: x(avg), x2: x(avg), y1: top - 3, y2: axisY, stroke: 'var(--class)', 'stroke-width': 2 });
+        var tt = s('title'); tt.textContent = 'Class average ' + fmt(avg);
+        tick.appendChild(tt);
+        svg.appendChild(tick);
+      }
+      placed.forEach(function (q) {
+        if (q.me) return;
+        svg.appendChild(s('circle', { cx: q.x, cy: mid + q.y, r: q.r, fill: 'var(--dot)', stroke: 'var(--surface)', 'stroke-width': 1.5 }));
+      });
+      placed.forEach(function (q) {
+        if (!q.me) return;
+        var c = s('circle', { cx: q.x, cy: mid + q.y, r: q.r, fill: 'var(--child)', stroke: 'var(--surface)', 'stroke-width': 2 });
+        var t = s('title'); t.textContent = 'Your child ' + fmt(mine);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+      return svg;
+    }
+
+    /* ---------- Progress tab ---------- */
+    function subjectChoices() {
+      var names = [];
+      yearExams().forEach(function (ex) {
+        ex.subjects.forEach(function (sub) { if (names.indexOf(sub.name) < 0) names.push(sub.name); });
+      });
+      return [OVERALL].concat(names);
+    }
+
+    function seriesFor(choice) {
+      return yearExams().map(function (ex) {
+        if (choice === OVERALL) {
+          var o = ex.overall;
+          return o ? { mine: o.mark, avg: o.avg, position: o.position, count: o.count, tied: o.tied } : { mine: null, avg: null };
+        }
+        var sub = ex.subjects.filter(function (x) { return x.name === choice; })[0];
+        return sub ? { mine: sub.mark, avg: sub.avg, absent: sub.absent } : { mine: null, avg: null, missing: true };
+      });
+    }
+
+    function renderProgress(panel) {
+      panel.textContent = '';
+      var choices = subjectChoices();
+      if (choices.indexOf(state.subject) < 0) state.subject = OVERALL;
+
+      var select = h('select', { id: 'subjectPick' });
+      choices.forEach(function (c) {
+        var opt = h('option', { value: c, text: c });
+        if (c === state.subject) opt.selected = true;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', function () { state.subject = select.value; renderProgress(panel); });
+      panel.appendChild(h('div', { cls: 'control' }, [h('label', { 'for': 'subjectPick', text: 'Show' }), select]));
+
+      var card = h('section', { cls: 'card', 'aria-labelledby': 'progTitle' }, [
+        h('h3', { id: 'progTitle', text: 'Progress across exams' }),
+        h('p', { cls: 'lede', text: (manyYears() ? state.data.years[state.year].label + ' · ' : '') + state.subject + ' · out of 100. Tap the chart to see each exam.' })
+      ]);
+      panel.appendChild(card);
+
+      var labels = yearExams().map(function (ex) { return ex.name; });
+      var pts = seriesFor(state.subject);
+      if (labels.length < 2) {
+        card.appendChild(legend([
+          { kind: 'key-line', color: 'var(--child)', label: 'Your child' },
+          { kind: 'key-line', color: 'var(--class)', label: 'Class average' }
+        ]));
+        card.appendChild(h('p', { cls: 'note-inline', text: 'The progress line appears once two or more exams have been released.' }));
+      } else {
+        var readout = h('div', { cls: 'readout', 'aria-live': 'polite' });
+        var holder = h('div', { cls: 'chart', tabindex: '0', role: 'img' });
+        holder.setAttribute('aria-label', 'Line chart of ' + state.subject + ' for your child and the class average across ' +
+          labels.length + ' exams. Use the arrow keys to step through exams. The same numbers are in the table below.');
+        card.appendChild(readout);
+        card.appendChild(holder);
+        lineChart(holder, readout, labels, pts, Math.max(200, card.clientWidth - 32));
+      }
+      card.appendChild(progressTable(labels, pts));
+    }
+
+    function progressTable(labels, pts) {
+      var showPos = state.subject === OVERALL;
+      var head = ['Exam', 'Your child', 'Class avg'].concat(showPos ? ['Position'] : []);
+      var table = h('table', null, [
+        h('caption', { cls: 'sr', text: state.subject + ' by exam' }),
+        h('thead', null, [h('tr', null, head.map(function (t) { return h('th', { scope: 'col', text: t }); }))])
+      ]);
+      var body = h('tbody');
+      labels.forEach(function (name, i) {
+        var p = pts[i];
+        var mine = p.absent ? 'Absent' : fmt(p.mine);
+        var cells = [h('td', { text: name }), h('td', { cls: 'mine', text: mine }), h('td', { text: fmt(p.avg) })];
+        if (showPos) {
+          cells.push(p.position
+            ? h('td', null, [ordinal(p.position), h('span', { cls: 'of', text: 'of ' + p.count + (p.tied ? ', shared' : '') })])
+            : h('td', { text: '—' }));
+        }
+        body.appendChild(h('tr', { cls: i === state.exam ? 'is-selected' : '' }, cells));
+      });
+      table.appendChild(body);
+      return table;
+    }
+
+    function wrapLabel(t, size, max) {
+      if (textWidth(t, size) <= max) return [t];
+      var words = t.split(/\s+/), line = '';
+      for (var i = 0; i < words.length; i++) {
+        var test = line ? line + ' ' + words[i] : words[i];
+        if (line && textWidth(test, size) > max) return [fitText(line, size, max), fitText(words.slice(i).join(' '), size, max)];
+        line = test;
+      }
+      return [fitText(t, size, max)];
+    }
+
+    function lineChart(holder, readout, labels, pts, width) {
+      var n = labels.length, ml = 30, mt = 10, mb = 44, H = 236, mr = 8;
+      var slot = (width - ml - mr) / n;
+      if (slot / 2 + mr < 40) { mr = 40 - slot / 2; slot = (width - ml - mr) / n; } // room for end labels
+      var iw = slot * n, ih = H - mt - mb;
+      var x = function (i) { return ml + (i + 0.5) * slot; };
+      var y = function (v) { return mt + ih - pct(v) / 100 * ih; };
+      var svg = s('svg', { viewBox: '0 0 ' + width + ' ' + H, width: width, height: H, 'aria-hidden': 'true', focusable: 'false' });
+
+      // selected exam band
+      svg.appendChild(s('rect', { x: ml + state.exam * slot + 2, y: mt - 4, width: slot - 4, height: ih + 4, rx: 6, fill: 'var(--band)' }));
+      // grid + y labels
+      [0, 25, 50, 75, 100].forEach(function (t) {
+        svg.appendChild(s('line', { x1: ml, x2: ml + iw, y1: y(t), y2: y(t), stroke: t === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1 }));
+        var lab = s('text', { x: ml - 6, y: y(t) + 4, 'text-anchor': 'end', 'font-size': 11, fill: 'var(--ink-3)', style: 'font-variant-numeric: tabular-nums' });
+        lab.textContent = String(t);
+        svg.appendChild(lab);
+      });
+      // x labels, wrapped onto two lines when long
+      labels.forEach(function (name, i) {
+        var lab = s('text', { y: mt + ih + 18, 'text-anchor': 'middle', 'font-size': 12, fill: i === state.exam ? 'var(--ink)' : 'var(--ink-2)', 'font-weight': i === state.exam ? 600 : 400 });
+        wrapLabel(name, 12, slot - 6).forEach(function (line, j) {
+          var span = s('tspan', { x: x(i), dy: j === 0 ? 0 : 14 });
+          span.textContent = line;
+          lab.appendChild(span);
+        });
+        svg.appendChild(lab);
+      });
+
+      function drawSeries(key, color, rr) {
+        var d = '', pen = false;
+        pts.forEach(function (p, i) {
+          var v = p[key];
+          if (v === null || v === undefined) { pen = false; return; }
+          d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
+          pen = true;
+        });
+        if (d) svg.appendChild(s('path', { d: d, fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+        pts.forEach(function (p, i) {
+          var v = p[key];
+          if (v === null || v === undefined) return;
+          svg.appendChild(s('circle', { cx: x(i), cy: y(v), r: rr, fill: color, stroke: 'var(--surface)', 'stroke-width': 2 }));
+        });
+      }
+      drawSeries('avg', 'var(--class)', 4);
+      drawSeries('mine', 'var(--child)', 5);
+
+      // direct labels at the last point of each line, unless they would collide
+      function lastIndex(key) { for (var i = pts.length - 1; i >= 0; i--) if (pts[i][key] !== null && pts[i][key] !== undefined) return i; return -1; }
+      var lm = lastIndex('mine'), la = lastIndex('avg');
+      var canLabel = lm >= 0 && la >= 0 && (lm !== la || Math.abs(y(pts[lm].mine) - y(pts[la].avg)) >= 16);
+      if (canLabel) {
+        [['mine', lm, 700], ['avg', la, 400]].forEach(function (k) {
+          var t = s('text', { x: x(k[1]) + 9, y: y(pts[k[1]][k[0]]) + 4, 'font-size': 12, fill: k[0] === 'mine' ? 'var(--ink)' : 'var(--ink-2)', 'font-weight': k[2] });
+          t.textContent = fmt(pts[k[1]][k[0]]);
+          svg.appendChild(t);
+        });
+      }
+
+      // crosshair + readout above the chart (hover, tap, or arrow keys); it never covers the lines
+      var cross = s('line', { y1: mt - 4, y2: mt + ih, stroke: 'var(--ink-3)', 'stroke-width': 1 });
+      svg.insertBefore(cross, svg.childNodes[1]);
+      var hit = s('rect', { x: ml, y: 0, width: iw, height: H, fill: 'transparent' });
+      svg.appendChild(hit);
+      holder.textContent = '';
+      holder.appendChild(svg);
+      var active = state.exam;
+
+      function show(i) {
+        active = i;
+        var p = pts[i];
+        cross.setAttribute('x1', x(i));
+        cross.setAttribute('x2', x(i));
+        readout.textContent = '';
+        readout.appendChild(h('span', { cls: 'ro-title', text: labels[i] }));
+        [['mine', 'Your child', 'var(--child)'], ['avg', 'Class average', 'var(--class)']].forEach(function (k) {
+          var key = h('i', { cls: 'key-line' });
+          key.style.background = k[2];
+          var val = k[0] === 'mine' && p.absent ? 'Absent' : fmt(p[k[0]]);
+          readout.appendChild(h('span', { cls: 'ro-item' }, [key, h('b', { text: val }), k[1]]));
+        });
+      }
+      function indexAt(evt) {
+        var box = svg.getBoundingClientRect();
+        var px = (evt.clientX - box.left) * (width / box.width);
+        return Math.max(0, Math.min(n - 1, Math.floor((px - ml) / slot)));
+      }
+      hit.addEventListener('pointermove', function (e) { show(indexAt(e)); });
+      hit.addEventListener('pointerdown', function (e) { show(indexAt(e)); });
+      hit.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') show(state.exam); });
+      holder.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); show(Math.min(n - 1, active + 1)); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); show(Math.max(0, active - 1)); }
+      });
+      show(state.exam);
+    }
+
+    /* ---------- Compare tab ---------- */
+    function renderCompare(panel) {
+      panel.textContent = '';
+      var modes = h('div', { cls: 'modes', role: 'group', 'aria-label': 'Compare by' });
+      [['exam', 'Exam to exam'], ['year', 'Year to year']].forEach(function (m) {
+        var b = h('button', { cls: 'chip', type: 'button', 'aria-pressed': String(state.cmpMode === m[0]), text: m[1] });
+        b.addEventListener('click', function () { state.cmpMode = m[0]; renderCompare(panel); });
+        modes.appendChild(b);
+      });
+      panel.appendChild(modes);
+      if (state.cmpMode === 'year') compareYears(panel); else compareExams(panel);
+    }
+
+    function noteCard(text) {
+      return h('div', { cls: 'card' }, [h('p', { cls: 'empty', text: text })]);
+    }
+
+    function examLabel(e) { return (manyYears() ? e.year + ' · ' : '') + e.exam.name; }
+
+    function subjectUnion(list) {
+      var names = [];
+      list.forEach(function (ex) { ex.subjects.forEach(function (sub) { if (names.indexOf(sub.name) < 0) names.push(sub.name); }); });
+      return names;
+    }
+    function subjectIn(ex, name) { return ex.subjects.filter(function (x) { return x.name === name; })[0] || null; }
+
+    function changeText(a, b) {
+      if (a === null || a === undefined || b === null || b === undefined) return null;
+      var d = Math.round((b - a) * 10) / 10;
+      if (d > 0) return '▲ ' + fmt(d) + ' up';
+      if (d < 0) return '▼ ' + fmt(-d) + ' down';
+      return 'No change';
+    }
+
+    function compareExams(panel) {
+      var list = allExams();
+      if (list.length < 2) {
+        panel.appendChild(noteCard('Comparison appears once two or more exams have been released.'));
+        return;
+      }
+      var keys = list.map(function (e) { return e.key; });
+      if (keys.indexOf(state.cmpTo) < 0) state.cmpTo = keys[keys.length - 1];
+      if (keys.indexOf(state.cmpFrom) < 0 || state.cmpFrom === state.cmpTo) {
+        var ti = keys.indexOf(state.cmpTo);
+        state.cmpFrom = keys[ti > 0 ? ti - 1 : 1];
+      }
+
+      function picker(id, label, prop) {
+        var sel = h('select', { id: id });
+        list.forEach(function (e) {
+          var opt = h('option', { value: e.key, text: examLabel(e) });
+          if (e.key === state[prop]) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', function () { state[prop] = sel.value; renderCompare(panel); });
+        return h('div', null, [h('label', { 'for': id, text: label }), sel]);
+      }
+      panel.appendChild(h('div', { cls: 'pickers' }, [picker('cmpFrom', 'From', 'cmpFrom'), picker('cmpTo', 'To', 'cmpTo')]));
+
+      var A = list[keys.indexOf(state.cmpFrom)], B = list[keys.indexOf(state.cmpTo)];
+      var card = h('section', { cls: 'card', 'aria-labelledby': 'cmpExTitle' }, [
+        h('h3', { id: 'cmpExTitle', text: 'Change between exams' }),
+        h('p', { cls: 'lede', text: examLabel(A) + ' → ' + examLabel(B) + ' · out of 100' }),
+        legend([
+          { kind: 'key-ring', color: 'var(--surface)', label: 'From: ' + A.exam.name },
+          { kind: 'key-dot me', color: 'var(--child)', label: 'To: ' + B.exam.name }
+        ])
+      ]);
+      panel.appendChild(card);
+      var width = Math.max(240, card.clientWidth - 32);
+
+      var rows = [];
+      var oa = A.exam.overall, ob = B.exam.overall;
+      if (oa || ob) {
+        var posNote = oa && ob && oa.position && ob.position
+          ? 'Class position ' + ordinal(oa.position) + ' → ' + ordinal(ob.position) + ' (of ' + ob.count + ')' : '';
+        rows.push({ name: OVERALL, a: oa ? oa.mark : null, b: ob ? ob.mark : null, ca: oa ? oa.avg : null, cb: ob ? ob.avg : null, note: posNote, overall: true });
+      }
+      subjectUnion([B.exam, A.exam]).forEach(function (name) {
+        var sa = subjectIn(A.exam, name), sb = subjectIn(B.exam, name);
+        var note = !sa ? 'Not in ' + A.exam.name : !sb ? 'Not in ' + B.exam.name :
+          sa.absent && sb.absent ? 'Absent both times' : sa.absent ? 'Absent in ' + A.exam.name : sb.absent ? 'Absent in ' + B.exam.name : '';
+        rows.push({ name: name, a: sa ? sa.mark : null, b: sb ? sb.mark : null, ca: sa ? sa.avg : null, cb: sb ? sb.avg : null,
+          absA: sa && sa.absent, absB: sb && sb.absent, note: note });
+      });
+
+      rows.forEach(function (r, i) {
+        var ch = changeText(r.a, r.b);
+        var row = h('div', { cls: 'db-row' + (r.overall ? ' overall' : ''), role: 'img' }, [
+          h('div', { cls: 'db-head' }, [
+            h('span', { cls: 'subj', text: r.name }),
+            h('span', { cls: 'change' }, [(r.absA ? 'Absent' : fmt(r.a)) + ' → ', h('b', { text: r.absB ? 'Absent' : fmt(r.b) }), ch ? '  ' + ch : ''])
+          ]),
+          dumbbell([{ v: r.a, ring: true }, { v: r.b }], width, i === rows.length - 1),
+          r.note ? h('p', { cls: 'db-note', text: r.note }) : null
+        ]);
+        row.setAttribute('aria-label', r.name + ': ' + A.exam.name + ' ' + (r.absA ? 'absent' : fmt(r.a)) + ', ' +
+          B.exam.name + ' ' + (r.absB ? 'absent' : fmt(r.b)) + (ch ? ', ' + ch : '') + (r.note ? '. ' + r.note : ''));
+        card.appendChild(row);
+      });
+
+      // Same numbers as a table, with the class average under each mark.
+      var table = h('table', null, [
+        h('caption', { cls: 'sr', text: 'Marks in ' + examLabel(A) + ' and ' + examLabel(B) }),
+        h('thead', null, [h('tr', null, ['Subject', A.exam.name, B.exam.name, 'Change'].map(function (t) { return h('th', { scope: 'col', text: t }); }))])
+      ]);
+      var body = h('tbody');
+      rows.forEach(function (r) {
+        var d = (r.a === null || r.a === undefined || r.b === null || r.b === undefined) ? '—' : ((r.b - r.a) > 0 ? '+' : '') + fmt(r.b - r.a);
+        body.appendChild(h('tr', null, [
+          h('td', { text: r.name }),
+          h('td', null, [r.absA ? 'Absent' : fmt(r.a), h('span', { cls: 'of', text: 'class ' + fmt(r.ca) })]),
+          h('td', { cls: 'mine' }, [r.absB ? 'Absent' : fmt(r.b), h('span', { cls: 'of', text: 'class ' + fmt(r.cb) })]),
+          h('td', { text: d })
+        ]));
+      });
+      table.appendChild(body);
+      card.appendChild(table);
+    }
+
+    /* Child's average for each subject over the exams released in one class year. */
+    function yearSummary(y) {
+      var out = { label: y.label, subjects: {}, overall: null };
+      var names = subjectUnion(y.exams);
+      names.forEach(function (name) {
+        var mine = [], cls = [];
+        y.exams.forEach(function (ex) {
+          var sub = subjectIn(ex, name);
+          if (!sub) return;
+          if (sub.mark !== null && sub.mark !== undefined) mine.push(sub.mark);
+          if (sub.avg !== null && sub.avg !== undefined) cls.push(sub.avg);
+        });
+        out.subjects[name] = { mine: mean(mine), avg: mean(cls), n: mine.length };
+      });
+      var om = [], oc = [];
+      y.exams.forEach(function (ex) { if (ex.overall) { om.push(ex.overall.mark); oc.push(ex.overall.avg); } });
+      out.overall = { mine: mean(om), avg: mean(oc), n: om.length };
+      out.names = names;
+      return out;
+    }
+    function mean(a) { return a.length ? Math.round(a.reduce(function (x, y) { return x + y; }, 0) / a.length * 10) / 10 : null; }
+
+    var YEAR_COLORS = ['var(--y1)', 'var(--y2)', 'var(--y3)'];
+    function yearColor(i, n) { return YEAR_COLORS[Math.min(YEAR_COLORS.length - 1, YEAR_COLORS.length - n + i)]; }
+
+    function compareYears(panel) {
+      var years = (state.data.years || []).filter(function (y) { return y.exams.length; });
+      if (years.length < 2) {
+        panel.appendChild(noteCard('Year-to-year comparison appears once results from a second class year are shown.'));
+        return;
+      }
+      var sums = years.map(yearSummary);
+      var names = [];
+      sums.slice().reverse().forEach(function (s) { s.names.forEach(function (n) { if (names.indexOf(n) < 0) names.push(n); }); });
+
+      var card = h('section', { cls: 'card', 'aria-labelledby': 'cmpYrTitle' }, [
+        h('h3', { id: 'cmpYrTitle', text: 'Year averages' }),
+        h('p', { cls: 'lede', text: 'Your child’s average over the exams released in each year · out of 100' }),
+        legend(sums.map(function (s, i) { return { kind: 'key-dot me', color: yearColor(i, sums.length), label: s.label }; }))
+      ]);
+      panel.appendChild(card);
+      var width = Math.max(240, card.clientWidth - 32);
+
+      var rows = [{ name: OVERALL, vals: sums.map(function (s) { return s.overall; }), overall: true }]
+        .concat(names.map(function (n) { return { name: n, vals: sums.map(function (s) { return s.subjects[n] || null; }) }; }));
+
+      rows.forEach(function (r, i) {
+        var mine = r.vals.map(function (v) { return v ? v.mine : null; });
+        var have = mine.filter(function (v) { return v !== null && v !== undefined; });
+        var firstI = mine.findIndex(function (v) { return v !== null && v !== undefined; });
+        var lastI = mine.length - 1 - mine.slice().reverse().findIndex(function (v) { return v !== null && v !== undefined; });
+        var ch = have.length > 1 ? changeText(mine[firstI], mine[lastI]) : null;
+        var row = h('div', { cls: 'db-row' + (r.overall ? ' overall' : ''), role: 'img' }, [
+          h('div', { cls: 'db-head' }, [
+            h('span', { cls: 'subj', text: r.name }),
+            h('span', { cls: 'change', text: ch ? ch + ' since ' + sums[firstI].label : (have.length ? '' : 'No marks') })
+          ]),
+          dumbbell(mine.map(function (v, j) { return { v: v, color: yearColor(j, sums.length) }; }), width, i === rows.length - 1)
+        ]);
+        row.setAttribute('aria-label', r.name + ': ' + sums.map(function (s, j) { return s.label + ' ' + fmt(mine[j]); }).join(', ') + (ch ? ', ' + ch : ''));
+        card.appendChild(row);
+      });
+
+      var table = h('table', null, [
+        h('caption', { cls: 'sr', text: 'Average marks by class year' }),
+        h('thead', null, [h('tr', null, ['Subject'].concat(sums.map(function (s) { return s.label; })).map(function (t) { return h('th', { scope: 'col', text: t }); }))])
+      ]);
+      var body = h('tbody');
+      rows.forEach(function (r) {
+        body.appendChild(h('tr', null, [h('td', { text: r.name })].concat(r.vals.map(function (v, j) {
+          return h('td', { cls: j === r.vals.length - 1 ? 'mine' : '' }, [v ? fmt(v.mine) : '—', h('span', { cls: 'of', text: 'class ' + (v ? fmt(v.avg) : '—') })]);
+        }))));
+      });
+      table.appendChild(body);
+      card.appendChild(table);
+      card.appendChild(h('p', { cls: 'note-inline', text: 'Each year’s figure is the average of that year’s released exams. Subjects can differ from year to year.' }));
+    }
+
+    /* Marks on one 0–100 line, joined in order. A ring marks a "from" value. */
+    function dumbbell(points, width, showAxis) {
+      var padX = 8, top = 4, mid = top + 9, axisY = mid + 11, height = axisY + (showAxis ? 15 : 3);
+      var x = function (v) { return padX + pct(v) / 100 * (width - padX * 2); };
+      var svg = s('svg', { viewBox: '0 0 ' + width + ' ' + height, width: width, height: height, 'aria-hidden': 'true', focusable: 'false' });
+      [0, 25, 50, 75, 100].forEach(function (t) {
+        svg.appendChild(s('line', { x1: x(t), x2: x(t), y1: top - 2, y2: axisY, stroke: 'var(--grid)', 'stroke-width': 1 }));
+      });
+      svg.appendChild(s('line', { x1: x(0), x2: x(100), y1: axisY, y2: axisY, stroke: 'var(--axis)', 'stroke-width': 1 }));
+      if (showAxis) {
+        [0, 25, 50, 75, 100].forEach(function (t) {
+          var lab = s('text', { x: x(t), y: axisY + 13, 'text-anchor': t === 0 ? 'start' : t === 100 ? 'end' : 'middle', 'font-size': 11, fill: 'var(--ink-3)' });
+          lab.textContent = String(t);
+          svg.appendChild(lab);
+        });
+      }
+      var have = points.filter(function (p) { return p.v !== null && p.v !== undefined; });
+      for (var i = 1; i < have.length; i++) {
+        svg.appendChild(s('line', { x1: x(have[i - 1].v), x2: x(have[i].v), y1: mid, y2: mid, stroke: 'var(--child)', 'stroke-opacity': 0.45, 'stroke-width': 3, 'stroke-linecap': 'round' }));
+      }
+      have.forEach(function (p) {
+        svg.appendChild(p.ring
+          ? s('circle', { cx: x(p.v), cy: mid, r: 5.5, fill: 'var(--surface)', stroke: 'var(--child)', 'stroke-width': 2.5 })
+          : s('circle', { cx: x(p.v), cy: mid, r: 6, fill: p.color || 'var(--child)', stroke: 'var(--surface)', 'stroke-width': 2 }));
+      });
+      return svg;
+    }
+
+    /* ---------- Comments tab ---------- */
+    function renderComments(panel, exam) {
+      panel.textContent = '';
+      var card = h('section', { cls: 'card', 'aria-labelledby': 'comTitle' }, [
+        h('h3', { id: 'comTitle', text: 'Teachers’ comments' }),
+        h('p', { cls: 'lede', text: exam.name })
+      ]);
+      if (!exam.comments || !exam.comments.length) {
+        card.appendChild(h('p', { cls: 'empty', text: 'No comments for this exam yet.' }));
+      } else {
+        exam.comments.forEach(function (c) {
+          card.appendChild(h('div', { cls: 'comment' }, [
+            h('p', { cls: 'c-subj', text: c.subject }),
+            h('p', { cls: 'c-text', text: c.text })
+          ]));
+        });
+      }
+      panel.appendChild(card);
+    }
+
+    /* ---------- keep charts sized to the screen ---------- */
+    var lastWidth = window.innerWidth, timer = null;
+    window.addEventListener('resize', function () {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      clearTimeout(timer);
+      timer = setTimeout(renderPanel, 150);
+    });
+
+    setHeader();
+  })();
+  askSheet({ action: 'info' }, function (res) {
+    if (!res || !res.ok || !res.info) return;
+    try { localStorage.setItem('j1t-info', JSON.stringify(res.info)); } catch (e) {}
+    var i = res.info, el = function (id) { return document.getElementById(id); };
+    if (i.school && el('school')) { el('school').textContent = i.school; el('school').hidden = false; }
+    if (i.className && el('title')) { el('title').textContent = i.className + ' results'; document.title = i.className + ' Results'; }
+    if (i.note && el('note')) { el('note').textContent = i.note; el('note').hidden = false; }
+  }, function () {});
+</script>
+</body>
+</html>
